@@ -1,0 +1,9 @@
+[project]
+name = "evals"
+version = "0.1.0"
+description = ""
+requires-python = ">=3.10, <3.13"
+dependencies = [
+    "agentuity>=0.0.85",
+    "anthropic>=0.52.0",
+]
