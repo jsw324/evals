@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: The Amazon rainforest, often called the 'lungs of the Earth,' covers approximately 2.1 million square miles across nine South American countries. Brazil contains about 60% of the rainforest, followed by Peru with 13%, and Colombia with 10%. The rainforest is home to over 400 billion trees and produces 20% of the world's oxygen.\n\nQuestion: What percentage of the Amazon rainforest is located in Brazil?",
+    "response": "60%"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: Marie Curie was born in Warsaw, Poland in 1867. She moved to Paris in 1891 to study at the University of Paris. In 1903, she became the first woman to win a Nobel Prize, sharing the Physics prize with her husband Pierre and Henri Becquerel for their work on radioactivity. She won a second Nobel Prize in Chemistry in 1911.\n\nQuestion: In what year did Marie Curie win her first Nobel Prize?",
+    "response": "1903"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: The Great Wall of China is not a single continuous wall, but rather a series of walls and fortifications built by different Chinese dynasties over many centuries. The most famous sections were built during the Ming Dynasty (1368-1644). The total length of all the walls is estimated to be over 13,000 miles, though much of it is now in ruins.\n\nQuestion: During which dynasty were the most famous sections of the Great Wall built?",
+    "response": "Ming Dynasty"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: Photosynthesis is the process by which plants convert sunlight, carbon dioxide, and water into glucose and oxygen. This process occurs primarily in the leaves, specifically in organelles called chloroplasts. Chlorophyll, the green pigment in plants, captures light energy and initiates the photosynthetic process.\n\nQuestion: In which organelles does photosynthesis primarily occur?",
+    "response": "chloroplasts"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: The Statue of Liberty was a gift from France to the United States in 1886 to celebrate the centennial of American independence and to celebrate the friendship between the two nations. The statue was designed by French sculptor Frédéric Auguste Bartholdi and its metal framework was built by Gustave Eiffel.\n\nQuestion: Who designed the Statue of Liberty?",
+    "response": "Frédéric Auguste Bartholdi"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: Bees communicate with each other through a behavior called the 'waggle dance.' When a worker bee finds a good source of nectar, it returns to the hive and performs this dance to tell other bees the direction and distance to the flowers. The angle of the dance indicates direction relative to the sun, while the duration indicates distance.\n\nQuestion: What does the duration of the waggle dance indicate?",
+    "response": "distance"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: The human brain contains approximately 86 billion neurons, which communicate through electrical and chemical signals. The brain weighs about 3 pounds and consumes roughly 20% of the body's total energy, despite being only 2% of the body's weight. The cerebral cortex, the brain's outer layer, is responsible for higher-order thinking.\n\nQuestion: What percentage of the body's total energy does the brain consume?",
+    "response": "20%"
+  },
+  {
+    "query": "Read the following passage and answer the question.\n\nPassage: Mount Everest, located in the Himalayas on the border between Nepal and Tibet, is the world's highest mountain at 29,032 feet above sea level. The first successful summit was achieved by Edmund Hillary from New Zealand and Tenzing Norgay, a Sherpa from Nepal, on May 29, 1953.\n\nQuestion: On what date was Mount Everest first successfully summited?",
+    "response": "May 29, 1953"
+  }
+] 

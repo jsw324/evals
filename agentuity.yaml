@@ -57,6 +57,11 @@ bundler:
 # The agents that are part of this project
 agents:
   - # The ID of the Agent which is automatically generated
-    id: agent_17b211472759291ae04350d94bb3e2ad
+    id: agent_2310bf5484a3a55c6412814e4f60c858
     # The name of the Agent which is editable
-    name: my agent
+    name: my_agent
+  - id: agent_abcf9ad4245d2d89aed9eb38aef21fd6
+    name: dataset_loader
+  - id: agent_83cc0fc807a0762df8ef1513deb0ba02
+    name: template_manager
+    description: Processes prompt templates with variable substitution and prepares prompts for evaluation by substituting template variables with actual data from the dataset

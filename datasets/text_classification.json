@@ -1,0 +1,50 @@
+[
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'I absolutely love this new restaurant! The food is amazing and the service is outstanding.'",
+    "response": "positive"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'The movie was terrible. Poor acting and a confusing plot made it unwatchable.'",
+    "response": "negative"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'The package was delivered on Tuesday at 3 PM.'",
+    "response": "neutral"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'This phone has decent battery life and an okay camera.'",
+    "response": "neutral"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'I'm so frustrated with this software. It crashes constantly and nothing works properly.'",
+    "response": "negative"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'What a fantastic day! Perfect weather and great company made it memorable.'",
+    "response": "positive"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'The meeting is scheduled for 2 PM in conference room B.'",
+    "response": "neutral"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'This book changed my life. Incredible insights and beautifully written.'",
+    "response": "positive"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'Disappointed with my purchase. The quality is poor and it broke after one week.'",
+    "response": "negative"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'The store opens at 9 AM and closes at 8 PM on weekdays.'",
+    "response": "neutral"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'Excellent customer service! They solved my problem quickly and were very helpful.'",
+    "response": "positive"
+  },
+  {
+    "query": "Classify the sentiment of this text as positive, negative, or neutral: 'This is the worst experience I've ever had. Completely unprofessional and rude staff.'",
+    "response": "negative"
+  }
+] 

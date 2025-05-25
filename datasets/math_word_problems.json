@@ -1,0 +1,62 @@
+[
+  {
+    "query": "Sarah has 12 apples. She gives 4 apples to her friend and eats 2 apples. How many apples does she have left?",
+    "response": "6"
+  },
+  {
+    "query": "A store sells notebooks for $3 each. If John buys 5 notebooks, how much money does he spend?",
+    "response": "15"
+  },
+  {
+    "query": "There are 24 students in a class. If they form groups of 6 students each, how many groups will there be?",
+    "response": "4"
+  },
+  {
+    "query": "A recipe calls for 2 cups of flour. If you want to make 3 times the recipe, how many cups of flour do you need?",
+    "response": "6"
+  },
+  {
+    "query": "Tom drives 60 miles per hour for 2 hours. How many miles does he travel?",
+    "response": "120"
+  },
+  {
+    "query": "A parking lot has 8 rows with 12 cars in each row. How many cars are in the parking lot?",
+    "response": "96"
+  },
+  {
+    "query": "Lisa saves $5 every week. How much money will she save in 10 weeks?",
+    "response": "50"
+  },
+  {
+    "query": "A pizza is cut into 8 slices. If 3 people each eat 2 slices, how many slices are left?",
+    "response": "2"
+  },
+  {
+    "query": "The temperature was 15°C in the morning and rose by 8°C by noon. What was the temperature at noon?",
+    "response": "23"
+  },
+  {
+    "query": "A train travels 150 miles in 3 hours. What is the average speed of the train in miles per hour?",
+    "response": "50"
+  },
+  {
+    "query": "Mark has 45 stickers. He gives away 12 stickers and buys 8 more. How many stickers does he have now?",
+    "response": "41"
+  },
+  {
+    "query": "A rectangular garden is 12 feet long and 8 feet wide. What is the area of the garden in square feet?",
+    "response": "96"
+  },
+  {
+    "query": "If it takes 15 minutes to walk 1 mile, how long will it take to walk 4 miles?",
+    "response": "60"
+  },
+  {
+    "query": "A bag contains 36 marbles. If you remove 1/4 of the marbles, how many marbles remain?",
+    "response": "27"
+  },
+  {
+    "query": "The price of a book is $18. If there's a 20% discount, what is the final price?",
+    "response": "14.40"
+  }
+] 

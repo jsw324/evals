@@ -1,0 +1,42 @@
+[
+  {
+    "query": "Extract all email addresses from this text and list them separated by commas: 'Please contact john.doe@company.com or sarah.smith@business.org for more information. You can also reach out to support@helpdesk.net if needed.'",
+    "response": "john.doe@company.com, sarah.smith@business.org, support@helpdesk.net"
+  },
+  {
+    "query": "Convert this list to JSON format: Name: Alice, Age: 25, City: New York",
+    "response": "{\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}"
+  },
+  {
+    "query": "Extract only the numbers from this text: 'The temperature was 72°F yesterday, dropped to 45°F overnight, and will reach 68°F today.'",
+    "response": "72, 45, 68"
+  },
+  {
+    "query": "Rewrite this sentence using exactly 5 words: 'The quick brown fox jumps over the lazy sleeping dog in the yard.'",
+    "response": "Fox jumps over sleeping dog."
+  },
+  {
+    "query": "List all the countries mentioned in this text in alphabetical order: 'She traveled from Canada to Mexico, then visited France and finally went to Australia.'",
+    "response": "Australia, Canada, France, Mexico"
+  },
+  {
+    "query": "Extract all dates from this text in MM/DD/YYYY format: 'The project started on January 15, 2023, had a review on March 3rd, 2023, and will end on December 20, 2023.'",
+    "response": "01/15/2023, 03/03/2023, 12/20/2023"
+  },
+  {
+    "query": "Count the number of words in this sentence: 'Artificial intelligence is revolutionizing the way we work and live.'",
+    "response": "11"
+  },
+  {
+    "query": "Convert this text to all uppercase and remove all punctuation: 'Hello, World! How are you today?'",
+    "response": "HELLO WORLD HOW ARE YOU TODAY"
+  },
+  {
+    "query": "Extract the first letter of each word and create an acronym: 'National Aeronautics and Space Administration'",
+    "response": "NASA"
+  },
+  {
+    "query": "List all the verbs in this sentence: 'The cat jumped onto the table, knocked over the vase, and ran away quickly.'",
+    "response": "jumped, knocked, ran"
+  }
+] 
