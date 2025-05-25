@@ -16,18 +16,14 @@ This evaluation system uses multiple specialized agents to create a robust, scal
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  Dataset Loader │───▶│ Template Manager│───▶│ Batch Processor │
-│     Agent       │    │     Agent       │    │     Agent       │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                        │
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│ Report Generator│◀───│ Metrics Calc.   │◀───│ Evaluation      │
+│  Dataset Loader │───▶│ Template Manager│───▶│ Evaluation      │
 │     Agent       │    │     Agent       │    │ Runner Agent    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                                                         │
+                                                        ▼
                        ┌─────────────────┐    ┌─────────────────┐
-                       │ Response Comp.  │◀───│ Model Interface │
-                       │     Agent       │    │     Agent       │
+                       │  LLM as Judge   │◀───│   Claude API    │
+                       │     Agent       │    │  (integrated)   │
                        └─────────────────┘    └─────────────────┘
 ```
 
@@ -37,12 +33,8 @@ This evaluation system uses multiple specialized agents to create a robust, scal
 
 - **`dataset_loader`**: Loads and validates ground truth evaluation datasets
 - **`template_manager`**: Handles prompt templates with variable substitution
-- **`batch_processor`**: Orchestrates evaluation runs across multiple test cases
-- **`evaluation_runner`**: Executes individual evaluation cases
-- **`model_interface`**: Communicates with various AI models (Claude, GPT, etc.)
-- **`response_comparator`**: Compares model outputs against expected results
-- **`metrics_calculator`**: Computes accuracy, similarity scores, and other metrics
-- **`report_generator`**: Produces comprehensive evaluation reports
+- **`evaluation_runner`**: Executes evaluation cases, coordinates model testing, and communicates directly with AI models (Claude, GPT, etc.)
+- **`llm_as_judge`**: Uses Claude to intelligently compare model outputs against expected results with 0-100 similarity scoring
 
 ## 📋 Prerequisites
 
@@ -95,15 +87,13 @@ Create a ground truth dataset in JSON format:
 
 ### 2. Create an Evaluation Request
 
-Send a request to the `batch_processor` agent:
+Send a request to the `dataset_loader` agent:
 
 ```json
 {
   "evaluation_id": "state_capitals_eval_001",
-  "dataset": {
-    "path": "datasets/state_capitals.json",
-    "format": "query_response_pairs"
-  },
+  "dataset_path": "datasets/state_capitals.json",
+  "format": "query_response_pairs",
   "prompt_template": {
     "template": "You are an expert on state capitals. Answer the following question: {{query}}",
     "variables": ["query"]
@@ -114,9 +104,8 @@ Send a request to the `batch_processor` agent:
     "temperature": 0.1
   },
   "evaluation_settings": {
-    "comparison_method": "exact_match",
-    "batch_size": 10,
-    "output_format": "detailed_report"
+    "similarity_threshold": 80,
+    "judge_model": "claude-3-5-haiku-latest"
   }
 }
 ```
@@ -130,8 +119,11 @@ The system will generate a comprehensive evaluation report:
   "evaluation_id": "state_capitals_eval_001",
   "summary": {
     "total_cases": 50,
-    "accuracy": 0.94,
-    "avg_response_time": 1.2
+    "average_similarity_score": 87.2,
+    "high_similarity_count": 42,
+    "medium_similarity_count": 6,
+    "low_similarity_count": 2,
+    "high_similarity_rate": 0.84
   },
   "detailed_results": [...],
   "model_config": {...}
@@ -142,11 +134,11 @@ The system will generate a comprehensive evaluation report:
 
 The evaluation system uses the Agentuity key-value store for agent communication:
 
-1. **Initial Request** → `batch_processor` agent
+1. **Initial Request** → `dataset_loader` agent
 2. **Dataset Loading** → Key: `eval_run_{id}_dataset`
-3. **Template Processing** → Key: `eval_run_{id}_template`
-4. **Individual Cases** → Key: `eval_run_{id}_case_{case_id}`
-5. **Aggregated Results** → Key: `eval_run_{id}_final`
+3. **Template Processing** → Key: `eval_run_{id}_processed`
+4. **Evaluation Execution** → Key: `eval_run_{id}_results`
+5. **LLM Judging** → Key: `eval_run_{id}_comparison` (Final structured results)
 
 ## 🛠️ Configuration
 
@@ -165,8 +157,8 @@ Configure default evaluation parameters:
 
 ```bash
 agentuity env set DEFAULT_MODEL=claude-3-5-sonnet-latest
-agentuity env set DEFAULT_BATCH_SIZE=10
-agentuity env set DEFAULT_COMPARISON_METHOD=exact_match
+agentuity env set DEFAULT_JUDGE_MODEL=claude-3-5-haiku-latest
+agentuity env set DEFAULT_SIMILARITY_THRESHOLD=80
 ```
 
 ## 📁 Project Structure
@@ -175,29 +167,25 @@ agentuity env set DEFAULT_COMPARISON_METHOD=exact_match
 ├── agents/
 │   ├── dataset_loader/         # Loads evaluation datasets
 │   ├── template_manager/       # Manages prompt templates
-│   ├── batch_processor/        # Orchestrates evaluations
-│   ├── evaluation_runner/      # Runs individual cases
-│   ├── model_interface/        # Interfaces with AI models
-│   ├── response_comparator/    # Compares responses
-│   ├── metrics_calculator/     # Calculates metrics
-│   └── report_generator/       # Generates reports
+│   ├── evaluation_runner/      # Executes evaluation cases and communicates with AI models
+│   └── llm_as_judge/          # Uses Claude to judge response similarity (0-100 scoring)
 ├── datasets/                   # Ground truth datasets
 ├── templates/                  # Prompt templates
-├── reports/                    # Generated evaluation reports
 ├── .venv/                      # Virtual environment
 ├── pyproject.toml             # Dependencies
 ├── server.py                  # Server entry point
 └── agentuity.yaml            # Project configuration
 ```
 
-## 🎯 Comparison Methods
+## 🎯 LLM-as-Judge Evaluation
 
-The system supports multiple comparison methods:
+The system uses Claude as an intelligent judge to evaluate response similarity:
 
-- **`exact_match`**: Exact string matching
-- **`semantic_similarity`**: Vector similarity comparison
-- **`regex_match`**: Pattern-based matching
-- **`custom`**: User-defined comparison functions
+- **Semantic Understanding**: Understands context, synonyms, and meaning beyond simple string matching
+- **Flexible Scoring**: Provides 0-100 similarity scores with detailed reasoning
+- **Context Aware**: Considers the original question, expected response, and actual response
+- **Consistent**: Uses low temperature settings for reliable, repeatable judgments
+- **Explainable**: Provides reasoning for each similarity score
 
 ## 🌐 Deployment
 
@@ -206,20 +194,6 @@ Deploy your evaluation system to Agentuity Cloud:
 ```bash
 agentuity deploy
 ```
-
-## 📖 Advanced Features
-
-### Custom Metrics
-
-Extend the `metrics_calculator` agent to support custom evaluation metrics.
-
-### Multi-Model Comparison
-
-Run evaluations across multiple models simultaneously for comparative analysis.
-
-### Streaming Evaluations
-
-Process large datasets with streaming evaluation capabilities.
 
 ## 🆘 Troubleshooting
 

@@ -65,3 +65,7 @@ agents:
   - id: agent_83cc0fc807a0762df8ef1513deb0ba02
     name: template_manager
     description: Processes prompt templates with variable substitution and prepares prompts for evaluation by substituting template variables with actual data from the dataset
+  - id: agent_ca2be5d9a329c61c3a43acacd7705f4b
+    name: evaluation_runner
+  - id: agent_08d619080886fbb4959f54ee9f3f3ac9
+    name: llm_as_judge

@@ -4,6 +4,16 @@ import os
 import aiohttp
 from typing import List, Dict, Any
 
+# {
+#   "evaluation_id": "sentiment_classification_eval_002", 
+#   "dataset_path": "datasets/text_classification.json",
+#   "format": "query_response_pairs",
+#   "prompt_template": {
+#     "template": "Classify the sentiment of the following text as either 'positive', 'negative', or 'neutral'. Text: {{query}}\n\nSentiment:",
+#     "variables": ["query"]
+#   }
+# }
+
 def welcome():
     return {
         "welcome": "Dataset Loader Agent - I load and validate ground truth evaluation datasets from local files, external URLs, or inline JSON, along with prompt templates",
