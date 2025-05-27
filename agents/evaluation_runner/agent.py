@@ -41,7 +41,6 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
         # Parse the incoming request
         data = await request.data.json()
         evaluation_id = data.get("evaluation_id")
-        model_config = data.get("model_config", {})
         
         if not evaluation_id:
             return response.json({
@@ -76,7 +75,7 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
                 context.logger.info("Executing case %d/%d: %s", i+1, total_cases, case["case_id"])
                 
                 # Execute the case by calling Claude directly
-                case_result = await execute_single_case(case, model_config, context)
+                case_result = await execute_single_case(case, context)
                 
                 if case_result.get("success", False):
                     successful_cases += 1
@@ -109,7 +108,6 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
             "total_cases": total_cases,
             "successful_cases": successful_cases,
             "failed_cases": failed_cases,
-            "model_config": model_config,
             "execution_results": execution_results,
             "status": "execution_completed"
         }
@@ -148,7 +146,7 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
             "error": f"Failed to execute evaluations: {str(e)}"
         })
 
-async def execute_single_case(case: Dict[str, Any], model_config: Dict[str, Any], context: AgentContext) -> Dict[str, Any]:
+async def execute_single_case(case: Dict[str, Any], context: AgentContext) -> Dict[str, Any]:
     """Execute a single evaluation case by calling Claude directly"""
     
     import time
@@ -156,9 +154,9 @@ async def execute_single_case(case: Dict[str, Any], model_config: Dict[str, Any]
     
     try:
         # Extract model configuration with defaults
-        model_name = model_config.get("model_name", "claude-3-5-sonnet-latest")
-        max_tokens = model_config.get("max_tokens", 1024)
-        temperature = model_config.get("temperature", 0.1)
+        model_name = "claude-3-5-sonnet-latest"
+        max_tokens = 1024
+        temperature = 0.1
         
         context.logger.info("Calling Claude with model: %s, max_tokens: %d, temperature: %f", 
                           model_name, max_tokens, temperature)
@@ -189,7 +187,11 @@ async def execute_single_case(case: Dict[str, Any], model_config: Dict[str, Any]
             "expected_response": case["expected_response"],
             "processed_prompt": case["processed_prompt"],
             "model_response": model_response,
-            "model_config": model_config,
+            "model_config": {
+                "model_name": model_name,
+                "max_tokens": max_tokens,
+                "temperature": temperature
+            },
             "execution_time": execution_time,
             "template_variables": case.get("template_variables", {})
         }

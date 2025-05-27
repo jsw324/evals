@@ -159,6 +159,10 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
             "format": dataset_format,
             "template_variables": prompt_template.get("variables", [])
         })
+        
+        # Update evaluation registry for Results API
+        await update_evaluation_registry(evaluation_id, context)
+        
         context.logger.info("Successfully loaded %d cases from dataset: %s", len(dataset), source_info.get("location", "unknown"))
         context.logger.info("Handing off to template_manager agent: %s", evaluation_id)
         
@@ -285,3 +289,33 @@ def validate_template(template: Dict[str, Any]) -> Dict[str, Any]:
         return {"valid": False, "error": f"Template declares unused variables: {', '.join(unused_variables)}"}
     
     return {"valid": True, "error": None}
+
+async def update_evaluation_registry(evaluation_id: str, context: AgentContext):
+    """Update the evaluation registry to include this evaluation ID"""
+    try:
+        # Get existing registry
+        registry_result = await context.kv.get("eval_registry", "evaluation_list")
+        
+        data = registry_result.data
+        context.logger.info("Registry result: %s", data)
+        
+        if registry_result.data is not None:
+            registry_data = await registry_result.data.json()
+            evaluation_ids = registry_data.get("evaluation_ids", [])
+        else:
+            evaluation_ids = []
+        
+        # Add this evaluation ID if not already present
+        if evaluation_id not in evaluation_ids:
+            evaluation_ids.append(evaluation_id)
+            context.logger.info("Added evaluation %s to registry (total: %d)", evaluation_id, len(evaluation_ids))
+        
+        # Update the registry
+        await context.kv.set("eval_registry", "evaluation_list", {
+            "evaluation_ids": evaluation_ids,
+            "last_updated": evaluation_id  # Track the most recent evaluation
+        })
+        
+    except Exception as e:
+        context.logger.warning("Failed to update evaluation registry: %s", str(e))
+        # Don't fail the whole operation if registry update fails

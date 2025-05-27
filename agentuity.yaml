@@ -43,7 +43,7 @@ deployment:
     # The CPU requirements
     cpu: 500M
     # The disk size requirements
-    disk: 100Mi
+    disk: 423Mi
 # You should not need to change these value
 bundler:
   enabled: true
@@ -57,15 +57,24 @@ bundler:
 # The agents that are part of this project
 agents:
   - # The ID of the Agent which is automatically generated
-    id: agent_2310bf5484a3a55c6412814e4f60c858
+    id: agent_ca2be5d9a329c61c3a43acacd7705f4b
     # The name of the Agent which is editable
+    name: evaluation_runner
+    # The IO types of the Agent which is editable
+    io_types:
+      - webhook
+  - id: agent_2310bf5484a3a55c6412814e4f60c858
     name: my_agent
   - id: agent_abcf9ad4245d2d89aed9eb38aef21fd6
     name: dataset_loader
+    io_types:
+      - webhook
   - id: agent_83cc0fc807a0762df8ef1513deb0ba02
     name: template_manager
     description: Processes prompt templates with variable substitution and prepares prompts for evaluation by substituting template variables with actual data from the dataset
-  - id: agent_ca2be5d9a329c61c3a43acacd7705f4b
-    name: evaluation_runner
-  - id: agent_08d619080886fbb4959f54ee9f3f3ac9
+    io_types:
+      - webhook
+  - id: agent_828d44ca5485d73392380f5ba223b968
     name: llm_as_judge
+  - id: agent_b46de37831f94d01b06b2ccfd183efa0
+    name: results_api

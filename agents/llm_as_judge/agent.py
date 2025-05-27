@@ -33,8 +33,8 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
         # Parse the incoming request
         data = await request.data.json()
         evaluation_id = data.get("evaluation_id")
-        similarity_threshold = data.get("similarity_threshold", 80)  # 0-100 scale
-        judge_model = data.get("judge_model", "claude-3-5-haiku-latest")  # Use faster model for judging
+        similarity_threshold = 80  # Fixed threshold
+        judge_model = "claude-3-5-haiku-latest"  # Fixed judge model
         
         if not evaluation_id:
             return response.json({
@@ -142,14 +142,22 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
         
         context.logger.info("Response comparison completed: avg similarity %.1f, %d high, %d medium, %d low", 
                           avg_similarity, high_similarity, medium_similarity, low_similarity)
-        context.logger.info("Handing off to metrics_calculator for final analysis")
         
-        # Hand off to metrics_calculator agent
-        return response.handoff(
-            {"name": "metrics_calculator"},
-            {"evaluation_id": evaluation_id},
-            {"source": "llm_as_judge"}
-        )
+        # Return the comparison results directly to the frontend
+        return response.json({
+            "evaluation_id": evaluation_id,
+            "status": "comparison_completed",
+            "summary": {
+                "total_cases": total_cases,
+                "average_similarity_score": round(avg_similarity, 1),
+                "similarity_threshold": similarity_threshold,
+                "high_similarity_count": high_similarity,
+                "medium_similarity_count": medium_similarity,
+                "low_similarity_count": low_similarity,
+                "high_similarity_rate": round(high_similarity / total_cases * 100, 1) if total_cases > 0 else 0,
+                "judge_model": judge_model
+            }
+        })
         
     except Exception as e:
         context.logger.error("Error in response comparison: %s", str(e))

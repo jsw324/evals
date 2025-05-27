@@ -1,0 +1,42 @@
+[
+  {
+    "query": "A company posts revenue of $1,500,000 and cost of goods sold of $900,000. What is its gross-profit margin (expressed as a percentage)?",
+    "response": "40.0%"
+  },
+  {
+    "query": "Cash-flow stream: Year 0 = –$500,000, Year 1 = +$200,000, Year 2 = +$250,000, Year 3 = +$300,000. Compute the internal rate of return (IRR) to two decimal places.",
+    "response": "21.65%"
+  },
+  {
+    "query": "An energy retrofit costs $400,000 up front and saves $120,000 per year. What is the simple payback period in years, to two decimal places?",
+    "response": "3.33"
+  },
+  {
+    "query": "If a firm reports EBITDA of $3.5 million, depreciation of $0.4 million, and amortization of $0.6 million, what is EBIT?",
+    "response": "$2.5 million"
+  },
+  {
+    "query": "Net income is $1.2 million. Add back $0.3 million of depreciation and amortization, subtract $0.4 million of capital expenditures and a $0.1 million increase in working capital. What is free cash flow?",
+    "response": "$1.0 million"
+  },
+  {
+    "query": "Total debt is $600,000 and total equity is $1.5 million. Calculate the debt-to-equity ratio (one decimal place).",
+    "response": "0.4"
+  },
+  {
+    "query": "EBIT is $2 million and annual interest expense is $0.4 million. What is the interest-coverage ratio (times)?",
+    "response": "5.0×"
+  },
+  {
+    "query": "Using the Gordon growth model, find the terminal value if next year’s free cash flow is projected at $10 million, the WACC is 9 %, and the perpetual growth rate is 3 %.",
+    "response": "$166.67 million"
+  },
+  {
+    "query": "Project cash flows (in dollars): Year 0 = –1,000,000; Years 1-4 = +400,000 each. What is the absolute change in NPV if the discount rate rises from 8 % to 9 %? Round to the nearest dollar.",
+    "response": "$28,963 decrease"
+  },
+  {
+    "query": "Revenue grows from $2.5 million to $4 million over four years (Year 0 to Year 4). Compute the compound annual growth rate (CAGR) to two decimal places.",
+    "response": "12.47%"
+  }
+]

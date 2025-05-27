@@ -7,6 +7,7 @@ dependencies = [
     "agentuity>=0.0.85",
     "aiohttp>=3.11.18",
     "anthropic>=0.52.0",
+    "requests>=2.31.0",
 ]
 
 [tool.uv.sources]
