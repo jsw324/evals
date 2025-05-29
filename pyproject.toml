@@ -9,6 +9,3 @@ dependencies = [
     "anthropic>=0.52.0",
     "requests>=2.31.0",
 ]
-
-[tool.uv.sources]
-agentuity = { path = "../sdk-py/dist/agentuity-0.0.85.post5+e4ecfb3b66448cd0b1fabe9b46908bff96019e95.tar.gz" }
