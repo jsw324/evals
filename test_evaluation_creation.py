@@ -8,7 +8,7 @@ import requests
 import time
 
 # Configuration
-AGENTUITY_BASE_URL = "https://dev-uzeflmvib.agentuity.run"
+AGENTUITY_BASE_URL = "https://dev-6iaifxmoj.agentuity.run "
 DATASET_LOADER_AGENT_ID = "agent_abcf9ad4245d2d89aed9eb38aef21fd6"
 RESULTS_API_AGENT_ID = "agent_b46de37831f94d01b06b2ccfd183efa0"
 

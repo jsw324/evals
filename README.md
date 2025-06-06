@@ -81,7 +81,7 @@ agentuity login
    python setup_env.py
    
    # Or manually set environment variables (optional)
-   export AGENTUITY_BASE_URL="https://dev-uzeflmvib.agentuity.run"
+   export AGENTUITY_BASE_URL=" https://dev-i9bbrvz6i.agentuity.run"
    ```
 
 3. **Install Backend Dependencies**:
@@ -132,7 +132,7 @@ uv run server.py
 
 The system is configured to use the Agentuity development environment:
 
-- **Base URL**: `https://dev-uzeflmvib.agentuity.run`
+- **Base URL**: `https://dev-i9bbrvz6i.agentuity.run`
 - **Dataset Loader Agent ID**: `agent_abcf9ad4245d2d89aed9eb38aef21fd6`
 - **Results API Agent ID**: `agent_b46de37831f94d01b06b2ccfd183efa0`
 - **Authentication**: Optional (not required in dev mode)

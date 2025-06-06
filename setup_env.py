@@ -15,7 +15,7 @@ def create_env_file():
     print("=" * 50)
     
     # Default values
-    default_base_url = "https://dev-uzeflmvib.agentuity.run"
+    default_base_url = "https://dev-i9bbrvz6i.agentuity.run"
     default_agent_id = "agent_abcf9ad4245d2d89aed9eb38aef21fd6"
     default_token = ""  # Dev mode typically doesn't need auth
     

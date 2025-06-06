@@ -92,8 +92,8 @@ class ApiService {
 
   constructor() {
     // Default to local dev environment
-    this.baseUrl = 'https://dev-uzeflmvib.agentuity.run/agent_b46de37831f94d01b06b2ccfd183efa0'
-    this.datasetLoaderUrl = 'https://dev-uzeflmvib.agentuity.run/agent_abcf9ad4245d2d89aed9eb38aef21fd6'
+    this.baseUrl = 'https://dev-2esoyfcm2.agentuity.run/agent_b46de37831f94d01b06b2ccfd183efa0'
+    this.datasetLoaderUrl = 'https://dev-2esoyfcm2.agentuity.run/agent_abcf9ad4245d2d89aed9eb38aef21fd6'
     this.apiToken = undefined // Set this if authentication is required
   }
 

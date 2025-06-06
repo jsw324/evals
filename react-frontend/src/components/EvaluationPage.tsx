@@ -27,6 +27,9 @@ interface EvaluationConfig {
 }
 
 const models = [
+	'claude-opus-4-20250514',
+	'claude-sonnet-4-20250514',
+	'claude-3-7-sonnet-20250219',
   'claude-3-5-sonnet-latest',
   'claude-3-5-haiku-latest',
   'claude-3-opus-latest',
@@ -36,9 +39,15 @@ const models = [
 ]
 
 const judgeModels = [
-  'claude-3-5-haiku-latest',
+ 'claude-opus-4-20250514',
+	'claude-sonnet-4-20250514',
+	'claude-3-7-sonnet-20250219',
   'claude-3-5-sonnet-latest',
-  'gpt-4o-mini'
+  'claude-3-5-haiku-latest',
+  'claude-3-opus-latest',
+  'gpt-4o',
+  'gpt-4o-mini',
+  'gpt-3.5-turbo'
 ]
 
 // Available datasets from the datasets directory
@@ -48,7 +57,9 @@ const availableDatasets = [
   'text_classification.json',
   'reading_comprehension.json',
   'instruction_following.json',
-	'financial_modeling.json'
+	'financial_modeling.json',
+	'golf_history_records.json',
+	'90s_music_trivia.json'
 ]
 
 // Funny loading messages to cycle through
@@ -81,10 +92,10 @@ export default function EvaluationPage() {
     evaluationName: '',
     datasetSource: 'existing',
     selectedDataset: '',
-    modelName: 'claude-3-5-sonnet-latest',
+    modelName: 'claude-sonnet-4-20250514',
     maxTokens: 100,
     temperature: 0.1,
-    judgeModel: 'claude-3-5-haiku-latest',
+    judgeModel: 'gpt-4o-mini',
     similarityThreshold: 80,
     promptTemplate: 'You are an expert assistant. Answer the following question: {{query}}'
   })

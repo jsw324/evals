@@ -25,8 +25,8 @@ interface Settings {
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<'general' | 'api' | 'defaults'>('general')
   const [settings, setSettings] = useState<Settings>({
-    agentuityBaseUrl: 'https://dev-uzeflmvib.agentuity.run',
-    agentId: 'agent_abcf9ad4245d2d89aed9eb38aef21fd6',
+    agentuityBaseUrl: 'https://agentuity.ai/api/b46de37831f94d01b06b2ccfd183efa0',
+    agentId: 'agent_b46de37831f94d01b06b2ccfd183efa0',
     resultsApiAgentId: 'agent_b46de37831f94d01b06b2ccfd183efa0', // Results API agent for local dev
     apiToken: '',
     defaultModel: 'claude-3-5-sonnet-latest',
