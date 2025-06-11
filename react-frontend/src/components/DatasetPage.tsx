@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   FolderIcon, 
@@ -9,70 +9,42 @@ import {
   TrashIcon,
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline'
-
-interface Dataset {
-  id: string
-  name: string
-  size: number
-  items: number
-  lastModified: string
-  type: 'json'
-}
-
-const mockDatasets: Dataset[] = [
-  {
-    id: '1',
-    name: 'superhero_powers.json',
-    size: 2048,
-    items: 12,
-    lastModified: '2024-01-15T10:30:00',
-    type: 'json'
-  },
-  {
-    id: '2',
-    name: 'math_problems.json',
-    size: 5120,
-    items: 31,
-    lastModified: '2024-01-14T15:20:00',
-    type: 'json'
-  },
-  {
-    id: '3',
-    name: 'sentiment_analysis.json',
-    size: 3072,
-    items: 25,
-    lastModified: '2024-01-13T09:45:00',
-    type: 'json'
-  },
-	{
-		id: '4',
-		name: 'financial_modeling.json',
-		size: 1024,
-		items: 10,
-		lastModified: '2025-05-12T12:30:00',
-		type: 'json'
-	},
-	{
-		id: '5',
-		name: 'golf_history_records.json',
-		size: 1024,
-		items: 10,
-		lastModified: '2025-05-12T12:30:00',
-		type: 'json'
-	},
-	{
-		id: '6',
-		name: '90s_music_trivia.json',
-		size: 1024,
-		items: 10,
-		lastModified: '2025-05-12T12:30:00',
-		type: 'json'
-	},
-]
+import { apiService, Dataset, DatasetPreview } from '../services/api'
 
 export default function DatasetPage() {
   const [activeTab, setActiveTab] = useState<'browse' | 'upload' | 'create'>('browse')
   const [selectedDataset, setSelectedDataset] = useState<string | null>(null)
+  const [datasets, setDatasets] = useState<Dataset[]>([])
+  const [datasetPreview, setDatasetPreview] = useState<DatasetPreview | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    loadDatasets()
+  }, [])
+
+  const loadDatasets = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const fetchedDatasets = await apiService.listDatasets()
+      setDatasets(fetchedDatasets)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load datasets')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loadDatasetPreview = async (filename: string) => {
+    try {
+      const preview = await apiService.getDatasetPreview(filename, 3)
+      setDatasetPreview(preview)
+      setSelectedDataset(filename)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load dataset preview')
+    }
+  }
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes'
@@ -133,48 +105,67 @@ export default function DatasetPage() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="space-y-6"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockDatasets.map((dataset) => (
-              <div key={dataset.id} className="card card-hover">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center">
-                    <DocumentTextIcon className="h-8 w-8 text-primary-600 mr-3" />
-                    <div>
-                      <h3 className="font-semibold text-gray-900 truncate">{dataset.name}</h3>
-                      <p className="text-sm text-gray-500">{dataset.items} items</p>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+              <p className="text-gray-600 mt-4">Loading datasets...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600 mb-4">{error}</p>
+              <button onClick={loadDatasets} className="btn-primary">
+                Retry
+              </button>
+            </div>
+          ) : datasets.length === 0 ? (
+            <div className="text-center py-12">
+              <FolderIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">No datasets found</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {datasets.map((dataset) => (
+                <div key={dataset.name} className="card card-hover">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center">
+                      <DocumentTextIcon className="h-8 w-8 text-primary-600 mr-3" />
+                      <div>
+                        <h3 className="font-semibold text-gray-900 truncate">{dataset.name}</h3>
+                        <p className="text-sm text-gray-500">{dataset.items} items</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Size:</span>
-                    <span className="text-gray-900">{formatFileSize(dataset.size)}</span>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Size:</span>
+                      <span className="text-gray-900">{formatFileSize(dataset.size)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Modified:</span>
+                      <span className="text-gray-900">{new Date(dataset.lastModified).toLocaleDateString()}</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Modified:</span>
-                    <span className="text-gray-900">{new Date(dataset.lastModified).toLocaleDateString()}</span>
+                  
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => loadDatasetPreview(dataset.name)}
+                      className="flex-1 btn-secondary text-sm py-2"
+                    >
+                      <EyeIcon className="h-4 w-4 mr-1" />
+                      Preview
+                    </button>
+                    <button className="btn-secondary text-sm py-2 px-3">
+                      <ArrowDownTrayIcon className="h-4 w-4" />
+                    </button>
+                    <button className="btn-secondary text-sm py-2 px-3 text-red-600 hover:bg-red-50">
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
-                
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => setSelectedDataset(dataset.id)}
-                    className="flex-1 btn-secondary text-sm py-2"
-                  >
-                    <EyeIcon className="h-4 w-4 mr-1" />
-                    Preview
-                  </button>
-                  <button className="btn-secondary text-sm py-2 px-3">
-                    <ArrowDownTrayIcon className="h-4 w-4" />
-                  </button>
-                  <button className="btn-secondary text-sm py-2 px-3 text-red-600 hover:bg-red-50">
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Dataset Preview Modal */}
           {selectedDataset && (
@@ -201,23 +192,35 @@ export default function DatasetPage() {
                 </div>
                 
                 <div className="space-y-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Sample Data:</h4>
-                    <div className="space-y-3">
-                      <div className="bg-white p-3 rounded border">
-                        <p className="text-sm text-gray-600 mb-1"><strong>Query:</strong></p>
-                        <p className="text-sm text-gray-900">What are Superman's main superpowers?</p>
-                        <p className="text-sm text-gray-600 mb-1 mt-2"><strong>Response:</strong></p>
-                        <p className="text-sm text-gray-900">Superman's main superpowers include super strength, flight, invulnerability, heat vision, and x-ray vision.</p>
+                  {datasetPreview && (
+                    <>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <h4 className="font-medium text-gray-900 mb-2">Dataset Info:</h4>
+                        <div className="text-sm text-gray-600 space-y-1">
+                          <p><strong>Total Items:</strong> {datasetPreview.total_items}</p>
+                          <p><strong>Schema:</strong> {Object.keys(datasetPreview.schema).join(', ')}</p>
+                        </div>
                       </div>
-                      <div className="bg-white p-3 rounded border">
-                        <p className="text-sm text-gray-600 mb-1"><strong>Query:</strong></p>
-                        <p className="text-sm text-gray-900">Can Spider-Man fly?</p>
-                        <p className="text-sm text-gray-600 mb-1 mt-2"><strong>Response:</strong></p>
-                        <p className="text-sm text-gray-900">No, Spider-Man cannot fly. He uses web-slinging to move through the air.</p>
+                      
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <h4 className="font-medium text-gray-900 mb-2">Sample Data:</h4>
+                        <div className="space-y-3">
+                          {datasetPreview.preview.map((item, index) => (
+                            <div key={index} className="bg-white p-3 rounded border">
+                              {Object.entries(item).map(([key, value]) => (
+                                <div key={key} className="mb-2 last:mb-0">
+                                  <p className="text-sm text-gray-600 mb-1"><strong>{key}:</strong></p>
+                                  <p className="text-sm text-gray-900 break-words">
+                                    {typeof value === 'string' ? value : JSON.stringify(value)}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </div>
               </motion.div>
             </motion.div>

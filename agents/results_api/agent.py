@@ -1,5 +1,7 @@
 from agentuity import AgentRequest, AgentResponse, AgentContext
 import json
+import os
+from datetime import datetime
 from typing import List, Dict, Any, Optional
 
 def welcome():
@@ -30,6 +32,16 @@ def welcome():
                 "operation": "debug_kv_store",
                 "description": "Debug KV store contents for troubleshooting",
                 "example": {"operation": "debug_kv_store"}
+            },
+            {
+                "operation": "list_datasets",
+                "description": "List all available datasets from the datasets directory",
+                "example": {"operation": "list_datasets"}
+            },
+            {
+                "operation": "get_dataset_preview",
+                "description": "Get preview of dataset contents",
+                "example": {"operation": "get_dataset_preview", "filename": "superhero_powers.json", "max_items": 3}
             }
         ]
     }
@@ -84,11 +96,20 @@ async def run(request: AgentRequest, response: AgentResponse, context: AgentCont
                 result = await handle_get_evaluation_cases(evaluation_id, context)
         elif operation == "debug_kv_store":
             result = await handle_debug_kv_store(context)
+        elif operation == "list_datasets":
+            result = await handle_list_datasets(context)
+        elif operation == "get_dataset_preview":
+            filename = data.get("filename")
+            max_items = data.get("max_items", 3)
+            if not filename:
+                result = {"error": "Missing required field: filename", "status": "error"}
+            else:
+                result = await handle_get_dataset_preview(filename, max_items, context)
         else:
             result = {
                 "error": "Unknown operation",
                 "operation": operation,
-                "available_operations": ["test", "list_evaluations", "get_evaluation_details", "get_evaluation_cases", "debug_kv_store"],
+                "available_operations": ["test", "list_evaluations", "get_evaluation_details", "get_evaluation_cases", "debug_kv_store", "list_datasets", "get_dataset_preview"],
                 "status": "error"
             }
         

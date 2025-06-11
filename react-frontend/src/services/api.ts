@@ -65,6 +65,36 @@ interface CreateEvaluationResponse {
   error?: string
 }
 
+interface Dataset {
+  name: string
+  size: number
+  items: number
+  lastModified: string
+  type: string
+  path: string
+}
+
+interface DatasetPreview {
+  filename: string
+  total_items: number
+  preview: Record<string, unknown>[]
+  schema: Record<string, string>
+}
+
+interface DatasetListResponse {
+  success: boolean
+  datasets: Dataset[]
+  count: number
+}
+
+interface DatasetPreviewResponse {
+  success: boolean
+  filename: string
+  total_items: number
+  preview: Record<string, unknown>[]
+  schema: Record<string, string>
+}
+
 interface DatasetLoaderPayload extends Record<string, unknown> {
   evaluation_id: string
   format: string
@@ -88,13 +118,15 @@ interface DatasetLoaderPayload extends Record<string, unknown> {
 class ApiService {
   private baseUrl: string
   private datasetLoaderUrl: string
+  private datasetApiUrl: string
   private apiToken?: string
 
   constructor() {
-    // Default to local dev environment
-    this.baseUrl = 'https://dev-2esoyfcm2.agentuity.run/agent_b46de37831f94d01b06b2ccfd183efa0'
-    this.datasetLoaderUrl = 'https://dev-2esoyfcm2.agentuity.run/agent_abcf9ad4245d2d89aed9eb38aef21fd6'
-    this.apiToken = undefined // Set this if authentication is required
+    // Use environment variables with fallbacks to local dev environment
+    this.baseUrl = import.meta.env.VITE_API_BASE_URL
+    this.datasetLoaderUrl = import.meta.env.VITE_DATASET_LOADER_URL
+    this.datasetApiUrl = import.meta.env.VITE_DATASET_API_URL
+    this.apiToken = import.meta.env.VITE_API_TOKEN || undefined // Set this if authentication is required
   }
 
   private async makeRequest<T>(url: string, data: Record<string, unknown> = {}): Promise<T> {
@@ -196,13 +228,53 @@ class ApiService {
     return response.cases
   }
 
+  async listDatasets(): Promise<Dataset[]> {
+    const response = await this.makeRequest<DatasetListResponse>(this.datasetApiUrl, {
+      operation: 'list_datasets'
+    })
+    
+    if (!response.success) {
+      throw new Error(response.error || 'Failed to fetch datasets')
+    }
+    
+    return response.datasets
+  }
+
+  async getDatasetPreview(filename: string, maxItems: number = 3): Promise<DatasetPreview> {
+    const response = await this.makeRequest<DatasetPreviewResponse>(this.datasetApiUrl, {
+      operation: 'get_dataset_preview',
+      filename,
+      max_items: maxItems
+    })
+    
+    if (!response.success) {
+      throw new Error(`Failed to fetch dataset preview: ${response.error}`)
+    }
+    
+    return {
+      filename: response.filename,
+      total_items: response.total_items,
+      preview: response.preview,
+      schema: response.schema
+    }
+  }
+
   // Method to update configuration
-  updateConfig(baseUrl: string, datasetLoaderUrl: string, apiToken?: string) {
+  updateConfig(baseUrl: string, datasetLoaderUrl: string, datasetApiUrl: string, apiToken?: string) {
     this.baseUrl = baseUrl
     this.datasetLoaderUrl = datasetLoaderUrl
+    this.datasetApiUrl = datasetApiUrl
     this.apiToken = apiToken
   }
 }
 
 export const apiService = new ApiService()
-export type { EvaluationSummary, EvaluationDetails, ComparisonCase, CreateEvaluationConfig, CreateEvaluationResponse } 
+export type { 
+  EvaluationSummary, 
+  EvaluationDetails, 
+  ComparisonCase, 
+  CreateEvaluationConfig, 
+  CreateEvaluationResponse,
+  Dataset,
+  DatasetPreview
+}

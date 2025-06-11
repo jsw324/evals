@@ -9,9 +9,8 @@ import {
   ExclamationTriangleIcon,
   ClockIcon
 } from '@heroicons/react/24/outline'
-import { apiService } from '../services/api'
+import { apiService, CreateEvaluationConfig, Dataset } from '../services/api'
 import { EvaluationStorage, type SavedEvaluation } from '../utils/storage'
-import type { CreateEvaluationConfig } from '../services/api'
 
 interface EvaluationConfig {
   evaluationId: string
@@ -50,17 +49,7 @@ const judgeModels = [
   'gpt-3.5-turbo'
 ]
 
-// Available datasets from the datasets directory
-const availableDatasets = [
-  'superhero_powers.json',
-  'math_word_problems.json', 
-  'text_classification.json',
-  'reading_comprehension.json',
-  'instruction_following.json',
-	'financial_modeling.json',
-	'golf_history_records.json',
-	'90s_music_trivia.json'
-]
+
 
 // Funny loading messages to cycle through
 const funnyLoadingMessages = [
@@ -99,6 +88,26 @@ export default function EvaluationPage() {
     similarityThreshold: 80,
     promptTemplate: 'You are an expert assistant. Answer the following question: {{query}}'
   })
+
+  const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([])
+  const [datasetsLoading, setDatasetsLoading] = useState(false)
+
+  useEffect(() => {
+    loadDatasets()
+  }, [])
+
+  const loadDatasets = async () => {
+    try {
+      setDatasetsLoading(true)
+      const datasets = await apiService.listDatasets()
+      setAvailableDatasets(datasets)
+    } catch (err) {
+      console.error('Failed to load datasets:', err)
+      setError('Failed to load available datasets')
+    } finally {
+      setDatasetsLoading(false)
+    }
+  }
 
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -460,10 +469,15 @@ export default function EvaluationPage() {
                   value={config.selectedDataset}
                   onChange={(e) => setConfig({...config, selectedDataset: e.target.value})}
                   className="input-field"
+                  disabled={datasetsLoading}
                 >
-                  <option value="">Choose a dataset...</option>
+                  <option value="">
+                    {datasetsLoading ? 'Loading datasets...' : 'Choose a dataset...'}
+                  </option>
                   {availableDatasets.map(dataset => (
-                    <option key={dataset} value={dataset}>{dataset}</option>
+                    <option key={dataset.name} value={dataset.name}>
+                      {dataset.name} ({dataset.items} items)
+                    </option>
                   ))}
                 </select>
               </div>
