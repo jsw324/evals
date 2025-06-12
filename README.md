@@ -158,13 +158,14 @@ AGENTUITY_API_TOKEN=  # Not required for dev mode
 
 2. **Verify agents are loaded**:
    ```
-   [INFO ] Loaded 5 agents
+   [INFO ] Loaded 6 agents
    [INFO ] Loaded agent: dataset_loader [agent_abcf9ad4245d2d89aed9eb38aef21fd6]
    [INFO ] Loaded agent: results_api [agent_b46de37831f94d01b06b2ccfd183efa0]
    [INFO ] Starting server on port 63229
    ```
 
-3. **Use the public URL**: `https://dev-uzeflmvib.agentuity.run`
+3. **Use the public URL**: `https://dev-uzeflmvib.agentuity.run` 
+You must set this URL in your `react-frontend/src/services/api` file.
 
 ### API Testing
 
